@@ -1,7 +1,7 @@
 AguacateProxy
 =============
 
-![Image of AguacateProxy](https://github.com/ntidev/logo.png)
+![Image of AguacateProxy](https://github.com/ntidev/aguacateproxy/blob/master/logo.png?raw=true)
 
 This is a very simple proxy used to be able to forward an address/port from one point to another.
 
