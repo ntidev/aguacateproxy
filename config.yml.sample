@@ -1,0 +1,3 @@
+endpoints: 
+  - { name: "test", from: ":2222", to: ":22", type: "sni", domain: "algo.xyz" }  
+  - { name: "test2", from: ":2223", to: ":80" }  
