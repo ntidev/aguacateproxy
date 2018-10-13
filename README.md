@@ -14,9 +14,9 @@ This proxy is entirely based on the library [tcpproxy](https://godoc.org/github.
 
 The simplest way to install this is with Docker.
 
-    ```    
-    $ docker run -p "8080:8080" -v "${PWD}/config.yml:/go/src/app/config.yml" -it ntidev/aguacateproxy
-    ```
+```shell
+ $ docker run -p "8080:8080" -v "${PWD}/etc:/etc/aguacateproxy" -it ntidev/aguacateproxy
+```
 
 Unless you make the container run on the host's network, you will have to map all the ports that you will use on the configuration file.
 
@@ -24,12 +24,11 @@ Unless you make the container run on the host's network, you will have to map al
 
 The configuration is based on a simple file called `config.yml`
 
-    ```
-    endpoints: 
-    - { name: "aguacateproxy_test", from: ":8080", to: "1.2.3.4:80" }
-    - { name: "aguacateproxy_test_sni", from: ":8080", to: "1.2.3.4:80", type: "sni", domain: "aguacateproxy.xyz" }  
-
-    ```
+```yml
+endpoints: 
+- { name: "aguacateproxy_test", from: ":8080", to: "1.2.3.4:80" }
+- { name: "aguacateproxy_test_sni", from: ":8080", to: "1.2.3.4:80", type: "sni", domain: "aguacateproxy.xyz" }  
+```
 
 The configuration consists of an array of `endpoints` which has the following structure:
 
