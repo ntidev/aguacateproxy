@@ -6,21 +6,21 @@ import "fmt"
 import "gopkg.in/yaml.v2"
 
 type Endpoint struct {
-	Name 	string
-	From 	string
-	To	 	string
-	Type 	string
-	Domain 	string
+	Name   string
+	From   string
+	To     string
+	Type   string
+	Domain string
 }
 
 type Config struct {
-	Endpoints		[]Endpoint
+	Endpoints []Endpoint
 }
 
 func main() {
-	
-	configData, yamlErr := ioutil.ReadFile("./config.yml")
-	if(yamlErr != nil) {
+
+	configData, yamlErr := ioutil.ReadFile("/etc/aguacateproxy/config.yml")
+	if yamlErr != nil {
 		panic(yamlErr)
 	}
 
@@ -30,18 +30,17 @@ func main() {
 		panic(configErr)
 	}
 
-	var p tcpproxy.Proxy	
-	for i := 0; i < len(config.Endpoints); i++ {
-		fmt.Printf("Adding endpoint " + config.Endpoints[i].Name + ", From " + config.Endpoints[i].From + " to " + config.Endpoints[i].To + "\n")
-		if(config.Endpoints[i].Type == "sni") {
-			fmt.Printf("Domain for prebious endpoint: " + config.Endpoints[i].Domain + "\n")
-			p.AddSNIRoute(config.Endpoints[i].From, config.Endpoints[i].Domain, tcpproxy.To(config.Endpoints[i].To))
+	var p tcpproxy.Proxy
+	for _, endpoint := range config.Endpoints {
+		fmt.Printf("Adding endpoint %s, From %s to %s\n", endpoint.Name, endpoint.From, endpoint.To)
+		if endpoint.Type == "sni" {
+			fmt.Printf("Domain for prebious endpoint: %s\n", endpoint.Domain)
+			p.AddSNIRoute(endpoint.From, endpoint.Domain, tcpproxy.To(endpoint.To))
 		} else {
-			p.AddRoute(config.Endpoints[i].From, tcpproxy.To(config.Endpoints[i].To))
+			p.AddRoute(endpoint.From, tcpproxy.To(endpoint.To))
 		}
-		
 	}
 
-	fmt.Printf("Ready to accept connections" + "\n");
+	fmt.Printf("Ready to accept connections\n")
 	p.Run()
 }
